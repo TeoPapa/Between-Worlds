@@ -1,0 +1,10 @@
+Thank you for downloading.
+
+The folder Built-In contains the materials and the prefabs for your Built-In project. 
+The folder URP contains the materials and the prefabs for your URP project.
+The folder HDRP contains the materials and the prefabs for your HDRP project.
+The folder Scenes contains 3 scenes: Built-In, URP, and HDRP.
+
+You can experiment with material shaders to see which one works best for you.
+
+I wish you good luck!!! Please leave a rating and review)
