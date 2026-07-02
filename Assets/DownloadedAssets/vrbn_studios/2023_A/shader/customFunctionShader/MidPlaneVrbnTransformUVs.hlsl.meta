@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: aa48b03c43a11c4429482e49f252e39c
+ShaderIncludeImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 264015
+  packageName: vrbn Studios Free Buildings URP Bundle 001
+  packageVersion: 1.0
+  assetPath: Assets/vrbn_studios/2023_A/shader/customFunctionShader/MidPlaneVrbnTransformUVs.hlsl
+  uploadId: 617985

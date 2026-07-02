@@ -1,0 +1,17 @@
+fileFormatVersion: 2
+guid: 7a5d8291088393440ac4c0f93cf564a9
+ShaderImporter:
+  externalObjects: {}
+  defaultTextures: []
+  nonModifiableTextures: []
+  preprocessorOverride: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 264015
+  packageName: vrbn Studios Free Buildings URP Bundle 001
+  packageVersion: 1.0
+  assetPath: Assets/vrbn_studios/2023_A/shader/vrbnInteriorMappingURP.shader
+  uploadId: 617985

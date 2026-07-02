@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 9e585ef966117c14b9d5fdee4fb0e247
+ShaderIncludeImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 264015
+  packageName: vrbn Studios Free Buildings URP Bundle 001
+  packageVersion: 1.0
+  assetPath: Assets/vrbn_studios/2023_A/shader/customFunctionShader/VrbnTransformUVs.hlsl
+  uploadId: 617985

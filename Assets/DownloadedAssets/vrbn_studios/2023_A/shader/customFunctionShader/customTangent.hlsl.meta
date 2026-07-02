@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 888b0b3a532466e478c2c0458510b51c
+ShaderIncludeImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 264015
+  packageName: vrbn Studios Free Buildings URP Bundle 001
+  packageVersion: 1.0
+  assetPath: Assets/vrbn_studios/2023_A/shader/customFunctionShader/customTangent.hlsl
+  uploadId: 617985
