@@ -1,2 +1,5 @@
 # Auto detect text files and perform LF normalization
 * text=auto
+Assets/Graphics/Models/Noathyn/BodyTextures/1/Body_Diffuse.tga filter=lfs diff=lfs merge=lfs -text
+Assets/Graphics/Models/Noathyn/BodyTextures/1/Body_Normal.tga filter=lfs diff=lfs merge=lfs -text
+Assets/Graphics/Models/Noathyn/BodyTextures/2/Body_Specular.tga filter=lfs diff=lfs merge=lfs -text
