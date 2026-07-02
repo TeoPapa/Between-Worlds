@@ -1,0 +1,59 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9620f8c34305754d8cc9a7e49e852d9, type: 3}
+  m_Name: TestDialogue1_en-US
+  m_EditorClassIdentifier: Unity.Localization::UnityEngine.Localization.Tables.StringTable
+  m_LocaleId:
+    m_Code: en-US
+  m_SharedData: {fileID: 11400000, guid: 99664b0c8421f954bba14d95a281469e, type: 2}
+  m_Metadata:
+    m_Items: []
+  m_TableData:
+  - m_Id: 19180089344
+    m_Localized: How can I help you str-
+    m_Metadata:
+      m_Items: []
+  - m_Id: 62444335104
+    m_Localized: Oh...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 65124495360
+    m_Localized: What do you want, elf?
+    m_Metadata:
+      m_Items: []
+  - m_Id: 213573496832
+    m_Localized: I would like some tomatoes.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 260428066816
+    m_Localized: I would like some juice.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 289297461248
+    m_Localized: I would like some potatoes.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 358641889280
+    m_Localized: We don't have them. Beat it!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1375668334592
+    m_Localized: But...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1402398633984
+    m_Localized: I said, beat it!
+    m_Metadata:
+      m_Items: []
+  references:
+    version: 2
+    RefIds: []

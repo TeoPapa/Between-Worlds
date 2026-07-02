@@ -1,0 +1,64 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b11a58205ec3474ca216360e9fa74a8, type: 3}
+  m_Name: TestDialogue1 Shared Data
+  m_EditorClassIdentifier: Unity.Localization::UnityEngine.Localization.Tables.SharedTableData
+  m_TableCollectionName: TestDialogue1
+  m_TableCollectionNameGuidString: 99664b0c8421f954bba14d95a281469e
+  m_Entries:
+  - m_Id: 19180089344
+    m_Key: TestDialogue1.1
+    m_Metadata:
+      m_Items: []
+  - m_Id: 62444335104
+    m_Key: TestDialogue1.2
+    m_Metadata:
+      m_Items: []
+  - m_Id: 65124495360
+    m_Key: TestDialogue1.3
+    m_Metadata:
+      m_Items: []
+  - m_Id: 213573496832
+    m_Key: TestDialogue1.4
+    m_Metadata:
+      m_Items: []
+  - m_Id: 260428066816
+    m_Key: TestDialogue1.5
+    m_Metadata:
+      m_Items: []
+  - m_Id: 289297461248
+    m_Key: TestDialogue1.6
+    m_Metadata:
+      m_Items: []
+  - m_Id: 358641889280
+    m_Key: TestDialogue1.7
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1375668334592
+    m_Key: TestDialogue1.8
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1402398633984
+    m_Key: TestDialogue1.9
+    m_Metadata:
+      m_Items: []
+  m_Metadata:
+    m_Items: []
+  m_KeyGenerator:
+    rid: 4815857736039792948
+  references:
+    version: 2
+    RefIds:
+    - rid: 4815857736039792948
+      type: {class: DistributedUIDGenerator, ns: UnityEngine.Localization.Tables, asm: Unity.Localization}
+      data:
+        m_CustomEpoch: 1770219036691
