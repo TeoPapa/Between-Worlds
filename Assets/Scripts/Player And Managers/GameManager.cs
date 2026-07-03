@@ -82,11 +82,12 @@ public class GameManager : MonoBehaviour
         List<ObjectID> objects = new List<ObjectID>(FindObjectsByType<ObjectID>());
         string[] EngagedObjects = GameHandler.EngagedObjects.ToArray();
 
-        for (int i = EngagedObjects.Length - 1; i >= 0; i--) {
+        for (int i = 0; i < EngagedObjects.Length; i++  ) {
             string ID = EngagedObjects[i];
 
             ObjectID obj = objects.Find(x => x.GetID() == ID);
             if (obj != null) {
+                Debug.Log("Enabled: " + obj.gameObject.name); 
                 obj.Engaged();
             }
         }
@@ -127,7 +128,7 @@ public class GameManager : MonoBehaviour
         GameHandler.CombatLock = PlayerCombatting.CombatLock;
         GameHandler.ShadowLock = PlayerCombatting.ShadowLock;
 
-        GameHandler.LockedInput = PlayerMoving.LockedInput;
+        GameHandler.LockedInput = PlayerMoving.isLocked();
 
         GameHandler.Save();
     }
@@ -153,7 +154,7 @@ public class GameManager : MonoBehaviour
     }
 
     IEnumerator LoadSceneAsync(int scene, bool curMode) {
-        PlayerMoving.LockedInput = true;
+        PlayerMoving.LockInput();
 
         if(curMode != GameHandler.FantasyMode && curMode) {
             PlayerMoving.CurrentCamera = CameraSwitch(GameHandler.FantasyMode);
@@ -170,7 +171,7 @@ public class GameManager : MonoBehaviour
         while (!asyncLoad.isDone) {
             if(asyncLoad.progress >= 0.9f) {
                 UserInterface.FadeOut();
-                PlayerMoving.LockedInput = false;
+                PlayerMoving.UnlockInput();
                 asyncLoad.allowSceneActivation = true;
                 Save();
             }

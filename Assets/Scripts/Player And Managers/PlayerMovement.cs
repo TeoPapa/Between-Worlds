@@ -36,7 +36,7 @@ public class PlayerMovement : MonoBehaviour {
 
     bool CanMove = true;
 
-    public bool LockedInput = true;
+    private bool LockedInput;
     public GameObject CurrentCamera;
 
     [HideInInspector]
@@ -72,6 +72,7 @@ public class PlayerMovement : MonoBehaviour {
     }
 
     public void LockInput() {
+        Debug.Log("Locking Input");
         LockedInput = true;
         CurrentCamera.GetComponent<CinemachineInputAxisController>().enabled = false;
     }
@@ -145,7 +146,9 @@ public class PlayerMovement : MonoBehaviour {
         isSitting = false;
     }
 
-
+    public bool isLocked() {
+        return LockedInput;
+    }
 
     private void Update() {
         if (LockedInput) {

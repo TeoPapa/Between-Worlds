@@ -3,13 +3,16 @@ using Unity.VisualScripting;
 using UnityEngine;
 
 [RequireComponent(typeof(Collider))]
-public class OneTimeInteraction : ObjectID {
+[RequireComponent(typeof(StoryEvent))]
+public class OneTimeInteraction : MonoBehaviour{
 
     public List<Interaction> Interaction;
 
-    public bool LockInput = false;
+    public StoryEvent Story;
 
-    public OneTimeInteraction(string id) : base(id) {
+    private void Awake() {
+        Story = this.GetComponent<StoryEvent>();
+        Story.DisablingObjects.Add(this.gameObject);
     }
 
     void OnTriggerEnter(Collider other) {
@@ -18,7 +21,6 @@ public class OneTimeInteraction : ObjectID {
             i.Interact();
         }
 
-        GameManager.Instance.GetMovement().LockedInput = LockInput;
-        Engaged();
+        Story.EngageEvent();
     }
 }

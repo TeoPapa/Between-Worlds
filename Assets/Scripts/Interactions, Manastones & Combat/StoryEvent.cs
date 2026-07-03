@@ -32,10 +32,13 @@ public class StoryEvent : ObjectID
         PlayerCombat Combat = GameManager.Instance.Player.GetComponent<PlayerCombat>();
         PlayerMovement move = GameManager.Instance.Player.GetComponent<PlayerMovement>();
 
-        if (LockedInput)
+        if (LockedInput) {
+            Debug.Log("Locking");
             move.LockInput();
-        else
+        } else {
+            Debug.Log("Unlocking");
             move.UnlockInput();
+        }
 
         Combat.CombatLock = CombatLock;
         Combat.ShadowLock = ShadowLock;
