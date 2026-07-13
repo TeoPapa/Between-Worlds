@@ -437,6 +437,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2e34d89ac969b47449231de6447d0387, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Enemy
+  ID: 50d75848-cb86-49ba-a798-0e9786c54ac6
   Health: 100
   HealthBar: {fileID: 8154379840652638417}
   HealthBarImage: {fileID: 3713762371574744279}
@@ -456,6 +457,7 @@ MonoBehaviour:
   IdleSounds:
   - {fileID: 8300000, guid: d3e4315320572894d87a1a0c48624dd0, type: 3}
   DeathParticles: {fileID: 4384267470720584709}
+  Story: {fileID: 0}
 --- !u!135 &5077316257571581421
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -680,6 +682,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: f487b8fb41d172042b80b77cbd89a555, type: 3}
   Hits:
   - {fileID: 8300000, guid: 74f052e32b7774f4e9bf971e8c8ef623, type: 3}
+  DeathClip: {fileID: 8300000, guid: b6083c3b2d5e2b14f9e3dfb5d27a73c7, type: 3}
 --- !u!1 &4346689562896991343
 GameObject:
   m_ObjectHideFlags: 0
@@ -34883,6 +34886,7 @@ Canvas:
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
   m_VertexColorAlwaysGammaSpace: 0
+  m_UseReflectionProbes: 0
   m_AdditionalShaderChannelsFlag: 0
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0

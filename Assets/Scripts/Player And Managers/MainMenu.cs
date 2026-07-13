@@ -13,6 +13,8 @@ public class MainMenu : MonoBehaviour
 
     public GameObject Fade;
 
+    public int NumberOfScenes = 3;
+
     bool ThereIsASave;
     public void StartGame() {
         if(Saver.SaveExists()) {
@@ -27,6 +29,8 @@ public class MainMenu : MonoBehaviour
         if(ThereIsASave) {
             Saver.DeleteSave();
         }
+        GameHandler.CurrentMusicID = new int[NumberOfScenes];
+        GameHandler.CurrentMusicRepeats = new bool[NumberOfScenes];
         StartCoroutine(WaitToLoad());
     }
 

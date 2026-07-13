@@ -72,7 +72,6 @@ public class PlayerMovement : MonoBehaviour {
     }
 
     public void LockInput() {
-        Debug.Log("Locking Input");
         LockedInput = true;
         CurrentCamera.GetComponent<CinemachineInputAxisController>().enabled = false;
     }
@@ -205,5 +204,8 @@ public class PlayerMovement : MonoBehaviour {
     private void OnDrawGizmos() {
         Gizmos.color = Color.black;
         Gizmos.DrawWireSphere(GroundPoint.position, .2f);
+
+        Gizmos.color = Color.black;
+        Gizmos.DrawLine(GroundPoint.position, GroundPoint.position+Vector3.up * 0.1f);
     }
 }

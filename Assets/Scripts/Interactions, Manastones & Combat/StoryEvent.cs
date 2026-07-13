@@ -33,10 +33,8 @@ public class StoryEvent : ObjectID
         PlayerMovement move = GameManager.Instance.Player.GetComponent<PlayerMovement>();
 
         if (LockedInput) {
-            Debug.Log("Locking");
             move.LockInput();
         } else {
-            Debug.Log("Unlocking");
             move.UnlockInput();
         }
 

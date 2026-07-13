@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Unity.Cinemachine;
 using Unity.VectorGraphics;
 using UnityEngine;
+using UnityEngine.Assemblies;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
@@ -13,9 +14,10 @@ public class GameManager : MonoBehaviour
     [HideInInspector]
     public static GameManager Instance;
 
+    public int CurrentSceneIndex = 0;
+
     public GameObject PlayerPrefab;
 
-    public List<AudioClip> MusicClips; //0: The area's combat music, after that the different area's loop music
     public bool ReplayFirstClip = false; //If the first song on the clips will be looped
 
     [HideInInspector]
@@ -57,8 +59,18 @@ public class GameManager : MonoBehaviour
         VoiceLines = this.GetComponentInChildren<VoiceLineManager>();
         UserInterface = this.GetComponentInChildren<UIManager>();
 
-        Manager.SetMusicClips(MusicClips);
-        Manager.SetIDAndStart(GameHandler.CurrentMusicID, ReplayFirstClip);
+
+
+        int id = GameHandler.CurrentMusicID[CurrentSceneIndex];
+        bool repeats = GameHandler.CurrentMusicRepeats[CurrentSceneIndex];
+
+        if (id == 0) {
+            Manager.CurrentMusicIndex = 0;
+            Manager.MusicRepeating = ReplayFirstClip;
+        } else {
+            Manager.CurrentMusicIndex = id;
+            Manager.MusicRepeating = repeats;
+        }
 
         PlayerMoving = Player.GetComponent<PlayerMovement>();
         PlayerCombatting = Player.GetComponent<PlayerCombat>();
@@ -78,6 +90,13 @@ public class GameManager : MonoBehaviour
 
     }
 
+    public void ChangeMusicId(int id, bool repeats) {
+        GameHandler.CurrentMusicID[CurrentSceneIndex] = id;
+        GameHandler.CurrentMusicRepeats[CurrentSceneIndex] = repeats;
+
+        Manager.PlayMusic(id, repeats);
+        Save();
+    }
     private void Start() {
         List<ObjectID> objects = new List<ObjectID>(FindObjectsByType<ObjectID>());
         string[] EngagedObjects = GameHandler.EngagedObjects.ToArray();
@@ -87,7 +106,6 @@ public class GameManager : MonoBehaviour
 
             ObjectID obj = objects.Find(x => x.GetID() == ID);
             if (obj != null) {
-                Debug.Log("Enabled: " + obj.gameObject.name); 
                 obj.Engaged();
             }
         }
@@ -119,6 +137,16 @@ public class GameManager : MonoBehaviour
 
     public UIManager GetUIManager() {
         return UserInterface;
+    }
+
+    public void GoToCombat() {
+        Manager.PlayMusic(-1, true);
+    }
+
+    public void ReturnFromCombat() {
+        int id = GameHandler.CurrentMusicID[CurrentSceneIndex];
+        bool repeats = GameHandler.CurrentMusicRepeats[CurrentSceneIndex];
+        Manager.PlayMusic(id, repeats);
     }
 
     public void Save() {

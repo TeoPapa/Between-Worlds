@@ -30,9 +30,17 @@ public class Enemy : ObjectID
 
     public List<AudioClip> IdleSounds;
 
+    public List<AudioClip> Steps;
+
+    public List<AudioClip> Hits;
+
+    public AudioClip DeathSound;
+
     public GameObject DeathParticles;
 
     public StoryEvent Story;
+
+    int SoundID = -1;
 
     bool CanAttack;
     bool IsMoving;
@@ -52,16 +60,26 @@ public class Enemy : ObjectID
         CanMove = true;
     }
 
-    void PlaySound() {
+
+
+    void EngageSound() {
         if(PlayingSound || IsMoving || (!IsMoving && !CanMove)) return;
 
-        GameManager.Instance.GetAudioManager().PlayEnemySound(IdleSounds[Random.Range(0, IdleSounds.Count-1)], gameObject.GetEntityId());
+        AudioManager Manager = GameManager.Instance.GetAudioManager();
+
+        SoundID = Manager.FirstEnemySound();
+        Manager.PlayEnemySound(IdleSounds[Random.Range(0, IdleSounds.Count - 1)], SoundID, true);
+
         PlayingSound = true;
+    }
+
+    public void MakeAFootstep() {
+        GameManager.Instance.GetAudioManager().PlayEnemySound(Steps[Random.Range(0, Steps.Count - 1)], SoundID,false);
     }
 
     void StopSound() {
         if(!PlayingSound) return;
-        GameManager.Instance.GetAudioManager().StopEnemySound(this.gameObject.GetEntityId());
+        GameManager.Instance.GetAudioManager().StopEnemySound(SoundID);
         PlayingSound = false;
     }
 
@@ -151,13 +169,15 @@ public class Enemy : ObjectID
         Collider[] hitColliders = Physics.OverlapSphere(AttackPoint.position, AttackRange, PlayerLayer);
         foreach (Collider col in hitColliders) {
             col.GetComponent<PlayerCombat>().TakeHit(this);
+            GameManager.Instance.GetAudioManager().PlayEnemySound(Hits[Random.Range(0, Hits.Count - 1)], SoundID, false);
             break;
         }
         CanMove = true;
     }
 
     void Die() {
-        GameManager.Instance.GetAudioManager().StopEnemySound(this.gameObject.GetInstanceID());
+        GameManager.Instance.GetAudioManager().StopEnemySound(SoundID);
+        GameManager.Instance.GetAudioManager().PlayEnemySound(DeathSound, SoundID, false);
         HealthBar.SetActive(false);
         Animations.SetTrigger("Die");
         DeathParticles.SetActive(true);
@@ -181,7 +201,7 @@ public class Enemy : ObjectID
 
     private void OnTriggerEnter(Collider other) {
         if(other.CompareTag("Player")) {
-            PlaySound();
+            EngageSound();
         }
     }
 }

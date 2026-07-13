@@ -8,21 +8,14 @@ public class AudioArea : MonoBehaviour
 
     private void OnTriggerEnter(Collider other) {
         if (other.CompareTag("Player")) {
-            GameManager.Instance.GetAudioManager().PlayMusic(MusicIndex, Skip);
-
-            GameHandler.CurrentMusicID = MusicIndex;
-            GameHandler.CurrentMusicRepeats = !Skip;
-            GameManager.Instance.Save();
+            
+            GameManager.Instance.ChangeMusicId(MusicIndex, !Skip);
         }
     }
 
     private void OnTriggerExit(Collider other) {
         if (other.CompareTag("Player")) {
-            GameManager.Instance.GetAudioManager().PlayMusic(MusicIndex+1, Skip);
-
-            GameHandler.CurrentMusicID = MusicIndex;
-            GameHandler.CurrentMusicRepeats = !Skip;
-            GameManager.Instance.Save();
+            GameManager.Instance.ChangeMusicId(MusicIndex+1, !Skip);
         }
     }
 }

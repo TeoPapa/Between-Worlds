@@ -74,15 +74,13 @@ public class PlayerCombat : MonoBehaviour {
             return;
         }
 
-        int id = 1;
         if (Sheathed) {
             PlayerAnimations.SetTrigger("Unsheath");
-            id = 0;
-        } else
+            GameManager.Instance.GoToCombat();
+        } else {
             PlayerAnimations.SetTrigger("Sheath");
-
-
-        GameManager.Instance.GetAudioManager().PlayMusic(id, false);
+            GameManager.Instance.ReturnFromCombat();
+        }
         Sheathed = !Sheathed;
 
         PlayerAnimations.SetBool("IsSheathed", Sheathed);
@@ -111,11 +109,11 @@ public class PlayerCombat : MonoBehaviour {
         Collider[] HitColliders = PlayerCombatMove(Point, Range);
 
         if(HitColliders.Length == 0) {
-            GameManager.Instance.GetAudioManager().PlayEffect(1);
+            GameManager.Instance.GetAudioManager().PlayCombatEffect(1);
             return;
         }
 
-        GameManager.Instance.GetAudioManager().PlayEffect(0);
+        GameManager.Instance.GetAudioManager().PlayCombatEffect(0);
         foreach (Collider en in PlayerCombatMove(Point, Range)) {
             if (id == 0 && en.gameObject.tag == "Nightmare")
                 Amount = 0;
@@ -134,7 +132,7 @@ public class PlayerCombat : MonoBehaviour {
 
         foreach (Collider en in PlayerCombatMove(DefendPoint, DefendRange)) {
             if(en.gameObject == Attacker.gameObject && en.gameObject.tag == "Horror") {
-                GameManager.Instance.GetAudioManager().PlayEffect(2);
+                GameManager.Instance.GetAudioManager().PlayCombatEffect(2);
                 en.GetComponent<Enemy>().TakeDamage(Attacker.Damage);
                 return;
             }

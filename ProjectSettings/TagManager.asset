@@ -10,6 +10,7 @@ TagManager:
   - Horror
   - Nightmare
   - Prefab
+  - Terrain
   layers:
   - Default
   - TransparentFX

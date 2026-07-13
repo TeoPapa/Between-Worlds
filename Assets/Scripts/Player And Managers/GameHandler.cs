@@ -27,8 +27,8 @@ public static class GameHandler
     public static List<string> EngagedObjects = new List<string>(); //A list with all the IDs of the object has engaged with. It is later used by the PlayerManager
                                                                     //to engage all the objects the player has already engaged with when they load a scene.
 
-    public static int CurrentMusicID = 1; //The ID of the current music. Defaulted to 1 meaning the first music of the game;
-    public static bool CurrentMusicRepeats = false; //If the current music repeats or not. Defaulted to false, meaning after this there will be another music playing
+    public static int[] CurrentMusicID; //The ID of the current music. Defaulted to 1 meaning the first music of the game;
+    public static bool[] CurrentMusicRepeats; //If the current music repeats or not. Defaulted to false, meaning after this there will be another music playing
 
     public static float MasterVolume = 1f; //The master volume of the game. Defaulted to 1, but can be changed in the options menu and is saved and loaded with the game
     public static float MusicVolume = 1f; //The volume of the music. Defaulted to 1, but can be changed in the options menu and is saved and loaded with the game
@@ -38,7 +38,7 @@ public static class GameHandler
 
     /* The AddObject function adds the ID of an object to the list of engaged objects if it is
      * not already in the list. This is used to keep track of which objects the player has
-     * engaged with, so that when they load a scene, they can engage with those objects again.
+     * engaged with, so that when they load a scene, sthey can engage with those objects again.
      */
     public static void AddObject(string objID) {
         if(objID == null || EngagedObjects.Contains(objID))
@@ -127,8 +127,8 @@ public class SaveData
     public float DialogueVolume;
     public float UIVolume;
 
-    public int CurrentMusicID;
-    public bool CurrentMusicRepeats;
+    public int[] CurrentMusicID;
+    public bool[] CurrentMusicRepeats;
     public SaveData() {
         Scene = GameHandler.CurrentScene;
 
