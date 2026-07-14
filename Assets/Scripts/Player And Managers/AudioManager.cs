@@ -49,6 +49,12 @@ public class  AudioManager : MonoBehaviour {
     public List<AudioClip> SwordHitAir; //The list of the sounds played when the player misses.
     public List<AudioClip> Deflect; //The list of sounds when deflecting an attack.
 
+
+    [Header("Ambience")]
+    public AudioSource Ambience; //The source that plays the ambience of the scene.
+
+    public List<AudioClip> AmbientSounds; //The list of the ambience clips.
+
     [Header("Enemies")]
     public List<AudioSource> EnemySources; //The list of sources that play the enemy effects.
     int EnemyAvailableIndex = 0; //The current available source to play effect.
@@ -91,6 +97,9 @@ public class  AudioManager : MonoBehaviour {
             source.loop = false;
         }
 
+        Ambience.playOnAwake = false;
+        Ambience.loop = true;
+
         DialogueSource.playOnAwake = false;
         DialogueSource.loop = false;
 
@@ -128,6 +137,7 @@ public class  AudioManager : MonoBehaviour {
 
         if(source.time < source.clip.length - DefaultFadeTime) return;
 
+        CurrentMusicIndex += 1;
         PlayMusic(CurrentMusicIndex, true);
         GameManager.Instance.Save();
     }
@@ -145,6 +155,8 @@ public class  AudioManager : MonoBehaviour {
 
         foreach (AudioSource source in Effects)
             source.Pause();
+
+        Ambience.Pause();
 
         foreach (AudioSource source in EnemySources)
             source.Pause();
@@ -166,6 +178,9 @@ public class  AudioManager : MonoBehaviour {
 
         foreach (AudioSource source in Effects)
             source.UnPause();
+
+        Ambience.UnPause();
+
 
         foreach (AudioSource source in EnemySources)
             source.UnPause();
@@ -222,8 +237,6 @@ public class  AudioManager : MonoBehaviour {
         StopAllCoroutines();
         StartCoroutine(Fade(source));
         Music1Playing = !Music1Playing;
-
-        if (!repeat) CurrentMusicIndex++;
     }
 
     IEnumerator Fade(AudioSource SourceToGo) {
@@ -284,6 +297,36 @@ public class  AudioManager : MonoBehaviour {
         Sound(Clothes, ClothesSounds[UnityEngine.Random.Range(0, ClothesSounds.Count)]);
     }
 
+    #endregion
+
+    #region Ambience Functions
+
+    public void EnterAmbience(int Clip) {
+        Ambience.clip = AmbientSounds[Clip];
+        Ambience.Play();
+        FadeAmbience(false);
+    }
+
+    public void ExitAmbience() {
+        FadeAmbience(true);
+        Ambience.Stop();
+    }
+    IEnumerator FadeAmbience(bool FadeOut) {
+        float From = 0;
+        float To = 1;
+
+        if(FadeOut) {
+            From = 1;
+            To = 0;
+        }
+
+        float elapsedTime = 0f;
+        while ((FadeOut && Ambience.volume > 0) || (!FadeOut && Ambience.volume < 1)) {
+            Ambience.volume = Mathf.Lerp(From, To, elapsedTime / 5);
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+    }
     #endregion
 
     #region Enemy Sound Effects Functions

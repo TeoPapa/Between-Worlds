@@ -67,6 +67,8 @@ public class GameManager : MonoBehaviour
         if (id == 0) {
             Manager.CurrentMusicIndex = 0;
             Manager.MusicRepeating = ReplayFirstClip;
+            if(!ReplayFirstClip)
+                GameHandler.CurrentMusicID[CurrentSceneIndex] = 1;
         } else {
             Manager.CurrentMusicIndex = id;
             Manager.MusicRepeating = repeats;
@@ -91,10 +93,13 @@ public class GameManager : MonoBehaviour
     }
 
     public void ChangeMusicId(int id, bool repeats) {
+        Manager.PlayMusic(id, repeats);
+
+        if (!repeats)
+            id += 1;
+
         GameHandler.CurrentMusicID[CurrentSceneIndex] = id;
         GameHandler.CurrentMusicRepeats[CurrentSceneIndex] = repeats;
-
-        Manager.PlayMusic(id, repeats);
         Save();
     }
     private void Start() {

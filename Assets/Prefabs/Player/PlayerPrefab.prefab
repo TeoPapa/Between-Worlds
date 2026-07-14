@@ -6216,8 +6216,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7684920222371780651}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.00685263, y: 0.9268178, z: -0.016933352, w: 0.3750669}
-  m_LocalPosition: {x: 37.54, y: 13.96, z: 132.94}
+  m_LocalRotation: {x: -0.024149282, y: -0.071076766, z: -0.001721312, w: 0.997177}
+  m_LocalPosition: {x: 0, y: 2.086, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -6256,7 +6256,7 @@ Camera:
     height: 1
   near clip plane: 0.3
   far clip plane: 1000
-  field of view: 60.000004
+  field of view: 59.8
   orthographic: 0
   orthographic size: 5
   m_Depth: -1
@@ -6681,7 +6681,6 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   GroundPoint: {fileID: 8588012415342812302}
-  LockedInput: 0
   CurrentCamera: {fileID: 0}
   isSitting: 0
   Teleport: 0
@@ -6698,8 +6697,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerCombat
   MaxHealth: 200
-  HealthBar: {fileID: 0}
-  HealthMeter: {fileID: 0}
   AttackRange: 0.48
   DefendRange: 1.5
   MainDamage: 30
