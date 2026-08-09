@@ -27,8 +27,8 @@ public static class GameHandler
     public static List<string> EngagedObjects = new List<string>(); //A list with all the IDs of the object has engaged with. It is later used by the PlayerManager
                                                                     //to engage all the objects the player has already engaged with when they load a scene.
 
-    public static int[] CurrentMusicID; //The ID of the current music. Defaulted to 1 meaning the first music of the game;
-    public static bool[] CurrentMusicRepeats; //If the current music repeats or not. Defaulted to false, meaning after this there will be another music playing
+    public static int[] CurrentMusicID = {0, 0, 0}; //The ID of the current music. Defaulted to 1 meaning the first music of the game;
+    public static bool[] CurrentMusicRepeats = {false, false, false}; //If the current music repeats or not. Defaulted to false, meaning after this there will be another music playing
 
     public static float MasterVolume = 1f; //The master volume of the game. Defaulted to 1, but can be changed in the options menu and is saved and loaded with the game
     public static float MusicVolume = 1f; //The volume of the music. Defaulted to 1, but can be changed in the options menu and is saved and loaded with the game

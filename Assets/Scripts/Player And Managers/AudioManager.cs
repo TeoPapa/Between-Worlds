@@ -55,10 +55,6 @@ public class  AudioManager : MonoBehaviour {
 
     public List<AudioClip> AmbientSounds; //The list of the ambience clips.
 
-    [Header("Enemies")]
-    public List<AudioSource> EnemySources; //The list of sources that play the enemy effects.
-    int EnemyAvailableIndex = 0; //The current available source to play effect.
-
     [Header("Dialogue And Voice Lines")]
     public AudioSource DialogueSource; //The source that plays the voice lines.
     public AudioSource VoiceLines; //The source that plays the dialogue.
@@ -88,11 +84,6 @@ public class  AudioManager : MonoBehaviour {
         Clothes.loop = false;
 
         foreach (AudioSource source in Effects) {
-            source.playOnAwake = false;
-            source.loop = false;
-        }
-
-        foreach (AudioSource source in EnemySources) {
             source.playOnAwake = false;
             source.loop = false;
         }
@@ -158,9 +149,6 @@ public class  AudioManager : MonoBehaviour {
 
         Ambience.Pause();
 
-        foreach (AudioSource source in EnemySources)
-            source.Pause();
-
         DialogueSource.Pause();
 
         VoiceLines.Pause();
@@ -180,10 +168,6 @@ public class  AudioManager : MonoBehaviour {
             source.UnPause();
 
         Ambience.UnPause();
-
-
-        foreach (AudioSource source in EnemySources)
-            source.UnPause();
 
         DialogueSource.UnPause();
 
@@ -327,37 +311,6 @@ public class  AudioManager : MonoBehaviour {
             yield return null;
         }
     }
-    #endregion
-
-    #region Enemy Sound Effects Functions
-
-    /* This function tells the Enemy class in which AudioSource it can play sound effects.
-     * It returns to that class the EnemyAvailableIndex and raises the index for the next
-     * enemy. */
-    public int FirstEnemySound() {
-        int IndexToSend = EnemyAvailableIndex;
-        EnemyAvailableIndex += 1;
-
-        if(EnemyAvailableIndex >= EnemySources.Count)
-            EnemyAvailableIndex = 0;
-
-        return IndexToSend;
-    }
-
-    /* This is the function that plays the enemy's effects. It receives an audio clip and
-     * plays it to the proper AudioSource, indexed by the ID. The boolean Repeats knows if
-     * this sound effect loops. */
-    public void PlayEnemySound(AudioClip Clip, int ID, bool Repeats) {
-        EnemySources[ID].loop = Repeats;
-        Sound(EnemySources[ID], Clip);
-    }
-
-    /* This function stops the sound effect of the enemy. It receives the ID of the AudioSource
-     * and stops it. */
-    public void StopEnemySound(int ID) {
-        EnemySources[ID].Stop();
-    }
-
     #endregion
 
     #region Dialogues And Voice Lines

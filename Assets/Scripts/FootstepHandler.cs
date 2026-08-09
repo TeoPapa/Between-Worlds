@@ -26,7 +26,8 @@ public class FootstepHandler : MonoBehaviour
     }
 
     private void Update() {
-        Ray ray = new Ray(GameManager.Instance.GetMovement().gameObject.transform.position + Vector3.up * 0.1f, Vector3.down);
+        
+        Ray ray = new Ray(Player.position + Vector3.up * 0.1f, Vector3.down);
 
         if (Physics.Raycast(ray, out hit, 1f, Ground)) {
             if (hit.collider.gameObject.tag.Equals("Terrain")) {

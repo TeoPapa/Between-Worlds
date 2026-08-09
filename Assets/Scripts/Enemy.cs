@@ -4,8 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Enemy : ObjectID
-{
+public class Enemy : MonoBehaviour {
     public int Health;
     int CurrentHealth;
 
@@ -40,12 +39,13 @@ public class Enemy : ObjectID
 
     public StoryEvent Story;
 
-    int SoundID = -1;
-
     bool CanAttack;
     bool IsMoving;
     bool CanMove;
     bool PlayingSound;
+    bool IsDead;
+
+    AudioSource EnemySounds;
 
     Transform Player;
     CharacterController Controller;
@@ -53,43 +53,22 @@ public class Enemy : ObjectID
 
     Vector3 Velocity;
 
-    public Enemy(string id) : base(id) {
-    }
-
     public void UnlockMove() {
         CanMove = true;
     }
 
-
-
-    void EngageSound() {
-        if(PlayingSound || IsMoving || (!IsMoving && !CanMove)) return;
-
-        AudioManager Manager = GameManager.Instance.GetAudioManager();
-
-        SoundID = Manager.FirstEnemySound();
-        Manager.PlayEnemySound(IdleSounds[Random.Range(0, IdleSounds.Count - 1)], SoundID, true);
-
-        PlayingSound = true;
-    }
-
-    public void MakeAFootstep() {
-        GameManager.Instance.GetAudioManager().PlayEnemySound(Steps[Random.Range(0, Steps.Count - 1)], SoundID,false);
-    }
-
-    void StopSound() {
-        if(!PlayingSound) return;
-        GameManager.Instance.GetAudioManager().StopEnemySound(SoundID);
-        PlayingSound = false;
-    }
+    #region Unity Callbacks
 
     private void Awake() {
         DeathParticles.SetActive(false);
+
+        EnemySounds = GetComponentInChildren<AudioSource>();
+
+        IsDead = false;
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
+    void Start() {
         PlayingSound = false;
         Player = GameManager.Instance.Player.transform;
         Controller = GetComponent<CharacterController>();
@@ -101,9 +80,12 @@ public class Enemy : ObjectID
     }
 
     // Update is called once per frame
-    void Update()
-    {
-        if (CurrentHealth <= 0) {
+    void Update() {
+
+        if(IsDead)
+            return;
+        else if (CurrentHealth <= 0) {
+            IsDead = true;
             Die();
             return;
         }
@@ -123,8 +105,7 @@ public class Enemy : ObjectID
         if (CurrentAttackCoolDown < AttackCoolDown) {
             CanAttack = false;
             CurrentAttackCoolDown += Time.deltaTime;
-        }
-        else {
+        } else {
             CanAttack = true;
         }
 
@@ -138,28 +119,44 @@ public class Enemy : ObjectID
             }
             return;
         } else if (distance <= VisualRange && CanMove) {
-            StopSound();
             IsMoving = true;
             Animations.SetBool("IsMoving", true);
             return;
         }
-        
+
         IsMoving = false;
         Animations.SetBool("IsMoving", false);
     }
 
     private void FixedUpdate() {
-        if(IsMoving && CanMove) {
-           transform.LookAt(Player);
-           
+        if (IsMoving && CanMove) {
+            transform.LookAt(Player);
+
             Vector3 direction = Quaternion.Euler(0, transform.rotation.eulerAngles.y, 0) * Vector3.forward;
 
-            Controller.Move(direction *Speed*Time.deltaTime);
+            Controller.Move(direction * Speed * Time.deltaTime);
         }
 
         Velocity.y += Physics.gravity.y * Time.deltaTime;
         Controller.Move(Velocity * Time.deltaTime);
     }
+
+    #endregion
+
+    #region Sound
+    public void MakeAFootstep() {
+        PlaySound(Steps[Random.Range(0, Steps.Count - 1)]);
+    }
+
+    void PlaySound(AudioClip clip) {
+        Debug.Log("Playing sound: " + clip.name);
+        EnemySounds.clip = clip;
+        EnemySounds.Play();
+    }
+
+    #endregion
+
+    #region Damage
 
     public void TakeDamage(int Ammount) {
         CurrentHealth -= Ammount;
@@ -169,39 +166,62 @@ public class Enemy : ObjectID
         Collider[] hitColliders = Physics.OverlapSphere(AttackPoint.position, AttackRange, PlayerLayer);
         foreach (Collider col in hitColliders) {
             col.GetComponent<PlayerCombat>().TakeHit(this);
-            GameManager.Instance.GetAudioManager().PlayEnemySound(Hits[Random.Range(0, Hits.Count - 1)], SoundID, false);
+            PlaySound(Hits[Random.Range(0, Hits.Count - 1)]);
             break;
         }
         CanMove = true;
     }
 
+    #endregion
+
+    #region Death
+
     void Die() {
-        GameManager.Instance.GetAudioManager().StopEnemySound(SoundID);
-        GameManager.Instance.GetAudioManager().PlayEnemySound(DeathSound, SoundID, false);
+        CanMove = false;
+        CanAttack = false;
+        PlaySound(DeathSound);
         HealthBar.SetActive(false);
         Animations.SetTrigger("Die");
         DeathParticles.SetActive(true);
     }
 
     public void DestroyMe() {
+        Debug.Log("Enemy " + gameObject.name + " has been destroyed!");
         if (Story != null) { Story.EngageEvent(); }
 
-        Engaged();
+        GetComponent<ObjectID>().Engaged();
     }
+
+    #endregion
+
+    #region Unity Events (Triggers, Gizmos etc.)
 
     private void OnDrawGizmosSelected() {
         Gizmos.color = Color.blue;
         Gizmos.DrawWireSphere(transform.position, VisualRange);
 
-        if(AttackPoint == null) return;
+        if (AttackPoint == null) return;
 
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(AttackPoint.position, AttackRange);
     }
 
     private void OnTriggerEnter(Collider other) {
-        if(other.CompareTag("Player")) {
-            EngageSound();
+        if (other.CompareTag("Player")) {
+            EnemySounds.clip = IdleSounds[Random.Range(0, IdleSounds.Count - 1)];
+            EnemySounds.Play();
         }
     }
+
+    private void OnTriggerExit(Collider other) {
+        if (other.CompareTag("Player")) {
+            EnemySounds.Stop();
+        }
+    }
+
+    private void Reset() {
+        Debug.Log("Reminder: Attatch an ObjectID component to this (" + gameObject.name + ") object to save its state!");
+    }
+
+    #endregion
 }
