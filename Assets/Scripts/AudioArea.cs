@@ -9,13 +9,13 @@ public class AudioArea : MonoBehaviour
     private void OnTriggerEnter(Collider other) {
         if (other.CompareTag("Player")) {
             
-            GameManager.Instance.ChangeMusicId(MusicIndex, !Skip);
+            GameManager.Instance.ChangeMusicId(MusicIndex);
         }
     }
 
     private void OnTriggerExit(Collider other) {
         if (other.CompareTag("Player")) {
-            GameManager.Instance.ChangeMusicId(MusicIndex+1, !Skip);
+            GameManager.Instance.ChangeMusicId(MusicIndex+1);
         }
     }
 }

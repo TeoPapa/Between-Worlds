@@ -190,12 +190,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 235015651108372044}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 4683040282772724200}
+  m_Father: {fileID: 638123693277031085}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!82 &955425013811454511
 AudioSource:
@@ -504,7 +504,6 @@ Transform:
   - {fileID: 4166552167246691062}
   - {fileID: 8315459721093858604}
   - {fileID: 638123693277031085}
-  - {fileID: 8725693347743698903}
   - {fileID: 4720209768012701089}
   - {fileID: 2223506696146264638}
   - {fileID: 5110049271034245859}
@@ -536,15 +535,6 @@ MonoBehaviour:
   MusicRepeating: 0
   CurrentMusicIndex: 0
   DefaultFadeTime: 2
-  Steps: {fileID: 2615131755056619009}
-  Clothes: {fileID: 955425013811454511}
-  ClothesSounds:
-  - {fileID: 8300000, guid: 1cf3ba248d2242b4897cc33e1134e865, type: 3}
-  - {fileID: 8300000, guid: f0bef7838f942734f9d5a9e0b017b5a6, type: 3}
-  - {fileID: 8300000, guid: aa5d56763ae89f04b9e99d6c1f4c6e3b, type: 3}
-  - {fileID: 8300000, guid: c64a5fd505983df4ca39d869a86a1a57, type: 3}
-  - {fileID: 8300000, guid: 2756a920e988d3f4b9a31dc578b86e25, type: 3}
-  - {fileID: 8300000, guid: 98175c33060e5e840a4f5a4081674a62, type: 3}
   Effects:
   - {fileID: 1384794747981409759}
   - {fileID: 4778804875209259119}
@@ -559,19 +549,6 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 18c4fb9b2071a4b40a6c0a2e8f61bdc1, type: 3}
   Deflect:
   - {fileID: 8300000, guid: dc571a8db5eb0b84c8c231ed47413db4, type: 3}
-  Ambience: {fileID: 8983959609595966807}
-  AmbientSounds:
-  - {fileID: 8300000, guid: c909767d9ed22e742b6f5b39d8fcf6bc, type: 3}
-  - {fileID: 8300000, guid: b2c44866fde626b4db3b0a168c1082ea, type: 3}
-  EnemySources:
-  - {fileID: 5294458903532297583}
-  - {fileID: 1641458545053008914}
-  - {fileID: 5243489799132870274}
-  - {fileID: 8879914698188227862}
-  - {fileID: 2903617461665854032}
-  - {fileID: 1706355534840755555}
-  - {fileID: 7483193075994457203}
-  - {fileID: 1461284106047358743}
   DialogueSource: {fileID: 4716047190776678675}
   VoiceLines: {fileID: 2761100878698796110}
   UIEffects: {fileID: 984149649766733003}
@@ -9799,7 +9776,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 638123693277031085}
-  - component: {fileID: 1133292443845781683}
+  - component: {fileID: 1017589678794663099}
   m_Layer: 0
   m_Name: Footsteps
   m_TagString: Untagged
@@ -9821,9 +9798,10 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8293219684637182374}
+  - {fileID: 8725693347743698903}
   m_Father: {fileID: 4683040282772724200}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1133292443845781683
+--- !u!114 &1017589678794663099
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -9832,18 +9810,21 @@ MonoBehaviour:
   m_GameObject: {fileID: 7896507683812689653}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 058e684a42ed8b244a798a54d17e111a, type: 3}
+  m_Script: {fileID: 11500000, guid: 14f0b2f8607738548b7472afc01b8975, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: '::'
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerMovementSounds
   Ground:
     serializedVersion: 2
     m_Bits: 64
   LayerNames:
   - Grass
-  - Sand
+  - Grass
+  - Stone
   - Stone
   - Mud
-  - Grass
+  Sources:
+  - {fileID: 2615131755056619009}
+  - {fileID: 955425013811454511}
   GrassSteps:
   - {fileID: 8300000, guid: 41ac70fd9a858494e9017fafde90998f, type: 3}
   - {fileID: 8300000, guid: 766e0aa664e018146b5af9178658b534, type: 3}
@@ -9879,6 +9860,13 @@ MonoBehaviour:
   - {fileID: 8300000, guid: de4188b4e2c2542419f9b6b807affa6b, type: 3}
   - {fileID: 8300000, guid: 365cd4591ba5e2546a4473d481e9a5ec, type: 3}
   - {fileID: 8300000, guid: 4c40eb30c03c16a49944b72e8ffe4b24, type: 3}
+  ClothesSounds:
+  - {fileID: 8300000, guid: 1cf3ba248d2242b4897cc33e1134e865, type: 3}
+  - {fileID: 8300000, guid: f0bef7838f942734f9d5a9e0b017b5a6, type: 3}
+  - {fileID: 8300000, guid: aa5d56763ae89f04b9e99d6c1f4c6e3b, type: 3}
+  - {fileID: 8300000, guid: c64a5fd505983df4ca39d869a86a1a57, type: 3}
+  - {fileID: 8300000, guid: 2756a920e988d3f4b9a31dc578b86e25, type: 3}
+  - {fileID: 8300000, guid: 98175c33060e5e840a4f5a4081674a62, type: 3}
 --- !u!1 &8020675117169872679
 GameObject:
   m_ObjectHideFlags: 0

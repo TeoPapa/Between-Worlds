@@ -1,9 +1,8 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Rendering;
 
-public class FootstepHandler : MonoBehaviour
-{
+public class PlayerMovementSounds : SoundfulObject {
     Terrain CurrentTerrain;
     Transform Player;
     public LayerMask Ground;
@@ -11,7 +10,9 @@ public class FootstepHandler : MonoBehaviour
     bool OnTerrain = false;
     RaycastHit hit;
 
-    public string[] LayerNames = {"Grass", "Grass", "Stone", "Stone", "Mud"};
+    public string[] LayerNames = { "Grass", "Grass", "Stone", "Stone", "Mud" };
+
+    public List<AudioSource> Sources;
 
     public AudioClip[] GrassSteps;
     public AudioClip[] MudSteps;
@@ -19,14 +20,19 @@ public class FootstepHandler : MonoBehaviour
     public AudioClip[] SandSteps;
     public AudioClip[] StoneSteps;
 
-    void Start()
-    {
+    public AudioClip[] ClothesSounds;
+
+    protected override List<AudioSource> SetSources() {
+        return Sources;
+    }
+
+    void Start() {
         Player = GameManager.Instance.GetMovement().gameObject.transform;
         CurrentTerrain = Terrain.activeTerrain;
     }
 
     private void Update() {
-        
+
         Ray ray = new Ray(Player.position + Vector3.up * 0.1f, Vector3.down);
 
         if (Physics.Raycast(ray, out hit, 1f, Ground)) {
@@ -39,6 +45,15 @@ public class FootstepHandler : MonoBehaviour
         }
     }
 
+    public void Step() {
+        PlaySound(GetCurrentGround());
+        ClothSound();
+    }
+
+    public void ClothSound() {
+        PlaySound(ClothesSounds[UnityEngine.Random.Range(0, ClothesSounds.Length - 1)]);
+    }
+
     public AudioClip GetCurrentGround() {
         string CurrentSurface = "Stone";
 
@@ -49,13 +64,13 @@ public class FootstepHandler : MonoBehaviour
 
         switch (CurrentSurface) {
             case "Grass":
-                return GrassSteps[UnityEngine.Random.Range(0, GrassSteps.Length-1)];
+                return GrassSteps[UnityEngine.Random.Range(0, GrassSteps.Length - 1)];
             case "Mud":
                 return MudSteps[UnityEngine.Random.Range(0, MudSteps.Length - 1)];
             case "Wood":
                 return WoodSteps[UnityEngine.Random.Range(0, WoodSteps.Length - 1)];
             case "Sand":
-                return SandSteps[UnityEngine.Random.Range(0, SandSteps.Length-1)];
+                return SandSteps[UnityEngine.Random.Range(0, SandSteps.Length - 1)];
             default:
                 return StoneSteps[UnityEngine.Random.Range(0, StoneSteps.Length - 1)];
         }

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Enemy : MonoBehaviour {
+public class Enemy : SoundfulObject {
     public int Health;
     int CurrentHealth;
 
@@ -45,8 +45,6 @@ public class Enemy : MonoBehaviour {
     bool PlayingSound;
     bool IsDead;
 
-    AudioSource EnemySounds;
-
     Transform Player;
     CharacterController Controller;
     Animator Animations;
@@ -59,12 +57,17 @@ public class Enemy : MonoBehaviour {
 
     #region Unity Callbacks
 
-    private void Awake() {
+    protected override void SoundfulAwake() {
         DeathParticles.SetActive(false);
 
-        EnemySounds = GetComponentInChildren<AudioSource>();
-
         IsDead = false;
+    }
+
+    protected override List<AudioSource> SetSources() {
+        List<AudioSource> sources = new List<AudioSource>();
+        sources.Add(GetComponentInChildren<AudioSource>());
+        Volume = 1f;
+        return sources;
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -148,12 +151,6 @@ public class Enemy : MonoBehaviour {
         PlaySound(Steps[Random.Range(0, Steps.Count - 1)]);
     }
 
-    void PlaySound(AudioClip clip) {
-        Debug.Log("Playing sound: " + clip.name);
-        EnemySounds.clip = clip;
-        EnemySounds.Play();
-    }
-
     #endregion
 
     #region Damage
@@ -208,14 +205,13 @@ public class Enemy : MonoBehaviour {
 
     private void OnTriggerEnter(Collider other) {
         if (other.CompareTag("Player")) {
-            EnemySounds.clip = IdleSounds[Random.Range(0, IdleSounds.Count - 1)];
-            EnemySounds.Play();
+            PlaySound(IdleSounds[Random.Range(0, IdleSounds.Count - 1)]);
         }
     }
 
     private void OnTriggerExit(Collider other) {
         if (other.CompareTag("Player")) {
-            EnemySounds.Stop();
+            StopSound();
         }
     }
 

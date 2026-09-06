@@ -1,19 +1,22 @@
+using System.Collections;
 using UnityEngine;
 
 [RequireComponent(typeof(Collider))]
-public class AmbientArea : MonoBehaviour
-{
-    public int AmbientClip;
+public class AmbientArea : SoundfulObject {
+    public AudioClip AmbientClip;
+
+    private void Start() {
+        DefaultSource.loop = true;
+    }
 
     private void OnTriggerEnter(Collider other) {
         if(!other.CompareTag("Player")) return;
 
-        GameManager.Instance.GetAudioManager().EnterAmbience(AmbientClip);
+        PlaySound(AmbientClip);
     }
 
     private void OnTriggerExit(Collider other) {
         if (!other.CompareTag("Player")) return;
-
-        GameManager.Instance.GetAudioManager().ExitAmbience();
+        StopSound();
     }
 }

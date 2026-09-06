@@ -1,10 +1,5 @@
-using NUnit.Framework;
-using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.InteropServices;
-using UnityEditor.Localization.Plugins.XLIFF.V12;
 using UnityEngine;
 using UnityEngine.Audio;
 
@@ -26,6 +21,8 @@ public class  AudioManager : MonoBehaviour {
                                           //of the scene. Each item corresponds to a clip from
                                           // MusicClips.
 
+    public List<bool> CurrentMusicRepeats;
+
     public bool MusicRepeating; //Knows if the current music is repeating or not.
     public int CurrentMusicIndex = 0; //The current music clip of the CurrentDefaultMusic list.
 
@@ -34,12 +31,7 @@ public class  AudioManager : MonoBehaviour {
     bool Music1Playing = true; //Knows if the first audio source is playing.
 
     [Header("Steps")]
-    public AudioSource Steps; //The source that plays the footsteps of the player.
-    public AudioSource Clothes; //The source that plays the sound of the player's clothes.
-
-    FootstepHandler Footsteps; //The script that handles the footsteps of the player.
-
-    public List<AudioClip> ClothesSounds; //The sounds of player's clothes.
+    PlayerMovementSounds PlayerSounds; //The script that handles the footsteps of the player.
 
     [Header("Sound Effects")]
     public List<AudioSource> Effects; //The list of sources that play the sound effects.
@@ -48,12 +40,6 @@ public class  AudioManager : MonoBehaviour {
     public List<AudioClip> SwordHit; //The list of the sounds played when the player hits.
     public List<AudioClip> SwordHitAir; //The list of the sounds played when the player misses.
     public List<AudioClip> Deflect; //The list of sounds when deflecting an attack.
-
-
-    [Header("Ambience")]
-    public AudioSource Ambience; //The source that plays the ambience of the scene.
-
-    public List<AudioClip> AmbientSounds; //The list of the ambience clips.
 
     [Header("Dialogue And Voice Lines")]
     public AudioSource DialogueSource; //The source that plays the voice lines.
@@ -68,7 +54,7 @@ public class  AudioManager : MonoBehaviour {
     /* Here the audio sources are initialized and the mixer volume is set up according to the
      * values of the GameHandler. */
     private void Awake() {
-        Footsteps = GetComponentInChildren<FootstepHandler>();
+        PlayerSounds = GetComponentInChildren<PlayerMovementSounds>();
 
         Music1.playOnAwake = false;
         Music2.playOnAwake = false;
@@ -77,19 +63,10 @@ public class  AudioManager : MonoBehaviour {
         Music1.volume = 1f;
         Music2.volume = 0f;
 
-        Steps.playOnAwake = false;
-        Steps.loop = false;
-
-        Clothes.playOnAwake = false;
-        Clothes.loop = false;
-
         foreach (AudioSource source in Effects) {
             source.playOnAwake = false;
             source.loop = false;
         }
-
-        Ambience.playOnAwake = false;
-        Ambience.loop = true;
 
         DialogueSource.playOnAwake = false;
         DialogueSource.loop = false;
@@ -113,7 +90,7 @@ public class  AudioManager : MonoBehaviour {
         Music1.loop = MusicRepeating;
         Music2.loop = MusicRepeating;
 
-        Sound(Music1, MusicClips[CurrentDefaultMusic[CurrentMusicIndex]]);
+        PlayMusic(GameHandler.CurrentMusicID);
     }
 
     /* Update is called once per frame. Here, a raycast is sent down from the player to check what surface
@@ -129,8 +106,9 @@ public class  AudioManager : MonoBehaviour {
         if(source.time < source.clip.length - DefaultFadeTime) return;
 
         CurrentMusicIndex += 1;
-        PlayMusic(CurrentMusicIndex, true);
-        GameManager.Instance.Save();
+        MusicRepeating = CurrentMusicRepeats[CurrentMusicIndex];
+
+        PlayMusic(CurrentMusicIndex);
     }
     #endregion
 
@@ -141,19 +119,18 @@ public class  AudioManager : MonoBehaviour {
         Music1.Pause();
         Music2.Pause();
 
-        Steps.Pause();
-        Clothes.Pause();
-
         foreach (AudioSource source in Effects)
             source.Pause();
-
-        Ambience.Pause();
 
         DialogueSource.Pause();
 
         VoiceLines.Pause();
 
         UIEffects.Pause();
+
+        foreach (SoundfulObject obj in FindObjectsByType<SoundfulObject>()) {
+            obj.Pause();
+        }
     }
 
     /* This function unpauses all the audio sources in the game. */
@@ -161,19 +138,18 @@ public class  AudioManager : MonoBehaviour {
         Music1.UnPause();
         Music2.UnPause();
 
-        Steps.UnPause();
-        Clothes.UnPause();
-
         foreach (AudioSource source in Effects)
             source.UnPause();
-
-        Ambience.UnPause();
 
         DialogueSource.UnPause();
 
         VoiceLines.UnPause();
 
         UIEffects.UnPause();
+
+        foreach (SoundfulObject obj in FindObjectsByType<SoundfulObject>()) {
+            obj.UnPause();
+        }
     }
 
     /* This function changes the volume of the audio mixer according to the source. */
@@ -195,7 +171,7 @@ public class  AudioManager : MonoBehaviour {
      * the id is greater than the number of IDs in the Current default music, it resets to
      * the 0 value. The repeat value is used to know if the music should repeat or not.
      */
-    public void PlayMusic(int id, bool repeat) {
+    public void PlayMusic(int id) {
         AudioSource source = Music1;
 
         if (Music1Playing)
@@ -208,15 +184,18 @@ public class  AudioManager : MonoBehaviour {
         } else if (id >= CurrentDefaultMusic.Count) {
             CurrentMusicIndex = 0;
             source.clip = MusicClips[CurrentDefaultMusic[0]];
-            MusicRepeating = repeat;
+            MusicRepeating = CurrentMusicRepeats[0];
 
         } else {
             CurrentMusicIndex = id;
             source.clip = MusicClips[CurrentDefaultMusic[id]];
-            MusicRepeating = repeat;
+            MusicRepeating = CurrentMusicRepeats[id];
         }
 
-        source.loop = MusicRepeating;
+        if (!MusicRepeating) {
+            GameHandler.CurrentMusicID = CurrentMusicIndex + 1;
+            GameHandler.Save();
+        }
 
         StopAllCoroutines();
         StartCoroutine(Fade(source));
@@ -247,10 +226,7 @@ public class  AudioManager : MonoBehaviour {
     /* This function plays the footsteps of the player. It checks what surface the player is stepping on
      * and plays a clip according to that surface. It also plays a sound of the player's clothes */
     public void PlayStep() {
-        AudioClip surfaceStep = Footsteps.GetCurrentGround();
-
-        Sound(Steps, surfaceStep);
-        Sound(Clothes, ClothesSounds[UnityEngine.Random.Range(0, ClothesSounds.Count)]);
+        PlayerSounds.Step();
     }
     #endregion
 
@@ -278,39 +254,9 @@ public class  AudioManager : MonoBehaviour {
             Clip = Deflect[UnityEngine.Random.Range(0, Deflect.Count)];
 
         PlayEffect(Clip);
-        Sound(Clothes, ClothesSounds[UnityEngine.Random.Range(0, ClothesSounds.Count)]);
+        PlayerSounds.ClothSound();
     }
 
-    #endregion
-
-    #region Ambience Functions
-
-    public void EnterAmbience(int Clip) {
-        Ambience.clip = AmbientSounds[Clip];
-        Ambience.Play();
-        FadeAmbience(false);
-    }
-
-    public void ExitAmbience() {
-        FadeAmbience(true);
-        Ambience.Stop();
-    }
-    IEnumerator FadeAmbience(bool FadeOut) {
-        float From = 0;
-        float To = 1;
-
-        if(FadeOut) {
-            From = 1;
-            To = 0;
-        }
-
-        float elapsedTime = 0f;
-        while ((FadeOut && Ambience.volume > 0) || (!FadeOut && Ambience.volume < 1)) {
-            Ambience.volume = Mathf.Lerp(From, To, elapsedTime / 5);
-            elapsedTime += Time.deltaTime;
-            yield return null;
-        }
-    }
     #endregion
 
     #region Dialogues And Voice Lines

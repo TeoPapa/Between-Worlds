@@ -29,8 +29,8 @@ public class MainMenu : MonoBehaviour
         if(ThereIsASave) {
             Saver.DeleteSave();
         }
-        GameHandler.CurrentMusicID = new int[NumberOfScenes];
-        GameHandler.CurrentMusicRepeats = new bool[NumberOfScenes];
+        GameHandler.CurrentMusicID = 0;
+
         StartCoroutine(WaitToLoad());
     }
 

@@ -23,7 +23,7 @@ public class GameManager : MonoBehaviour
     [HideInInspector]
     public GameObject Player;
 
-    AudioManager Manager;
+    AudioManager SoundManager;
     DialogueManager Dialogue;
     VoiceLineManager VoiceLines;
     UIManager UserInterface;
@@ -54,25 +54,10 @@ public class GameManager : MonoBehaviour
 
         Player = NewPlayer.GetComponentInChildren<PlayerMovement>().gameObject;
 
-        Manager = this.GetComponentInChildren<AudioManager>();
+        SoundManager = this.GetComponentInChildren<AudioManager>();
         Dialogue = this.GetComponentInChildren<DialogueManager>();
         VoiceLines = this.GetComponentInChildren<VoiceLineManager>();
         UserInterface = this.GetComponentInChildren<UIManager>();
-
-
-
-        int id = GameHandler.CurrentMusicID[CurrentSceneIndex];
-        bool repeats = GameHandler.CurrentMusicRepeats[CurrentSceneIndex];
-
-        if (id == 0) {
-            Manager.CurrentMusicIndex = 0;
-            Manager.MusicRepeating = ReplayFirstClip;
-            if(!ReplayFirstClip)
-                GameHandler.CurrentMusicID[CurrentSceneIndex] = 1;
-        } else {
-            Manager.CurrentMusicIndex = id;
-            Manager.MusicRepeating = repeats;
-        }
 
         PlayerMoving = Player.GetComponent<PlayerMovement>();
         PlayerCombatting = Player.GetComponent<PlayerCombat>();
@@ -92,16 +77,12 @@ public class GameManager : MonoBehaviour
 
     }
 
-    public void ChangeMusicId(int id, bool repeats) {
-        Manager.PlayMusic(id, repeats);
-
-        if (!repeats)
-            id += 1;
-
-        GameHandler.CurrentMusicID[CurrentSceneIndex] = id;
-        GameHandler.CurrentMusicRepeats[CurrentSceneIndex] = repeats;
+    public void ChangeMusicId(int id) {
+        GameHandler.CurrentMusicID = id;
+        SoundManager.PlayMusic(id);
         Save();
     }
+
     private void Start() {
         List<ObjectID> objects = new List<ObjectID>(FindObjectsByType<ObjectID>());
         string[] EngagedObjects = GameHandler.EngagedObjects.ToArray();
@@ -129,7 +110,7 @@ public class GameManager : MonoBehaviour
     }
 
     public AudioManager GetAudioManager() {
-        return Manager;
+        return SoundManager;
     }
 
     public DialogueManager GetDialogueManager() {
@@ -145,13 +126,13 @@ public class GameManager : MonoBehaviour
     }
 
     public void GoToCombat() {
-        Manager.PlayMusic(-1, true);
+        SoundManager.PlayMusic(-1);
     }
 
     public void ReturnFromCombat() {
-        int id = GameHandler.CurrentMusicID[CurrentSceneIndex];
-        bool repeats = GameHandler.CurrentMusicRepeats[CurrentSceneIndex];
-        Manager.PlayMusic(id, repeats);
+        int id = GameHandler.CurrentMusicID;
+
+        SoundManager.PlayMusic(id);
     }
 
     public void Save() {
