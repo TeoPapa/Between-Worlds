@@ -22,11 +22,7 @@ public class PlayerInteractions : MonoBehaviour
     }
 
     void OnPause() {
-        UIManager UI = GameManager.Instance.GetUIManager();
-        if (UI.isPaused())
-            UI.ClosePauseMenu();
-        else
-            UI.OpenPauseMenu();
+        GameManager.Instance.TogglePause();
     }
 
     public void UseManastone() {

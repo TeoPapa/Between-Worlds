@@ -44,10 +44,8 @@ public class GameManager : MonoBehaviour
         if(SceneManager.GetActiveScene().buildIndex == 0)
             return;
 
-        PlayerMovement pl = FindAnyObjectByType<PlayerMovement>();
-
-        if (pl != null) {
-            Destroy(pl.gameObject.transform.parent.gameObject);
+        foreach(PlayerMovement p in FindObjectsByType<PlayerMovement>()) {
+            Destroy(p.gameObject.transform.parent.gameObject);
         }
 
         GameObject NewPlayer = Instantiate(PlayerPrefab, GameHandler.PlayerPosition, Quaternion.Euler(GameHandler.PlayerRotation));
@@ -133,6 +131,16 @@ public class GameManager : MonoBehaviour
         int id = GameHandler.CurrentMusicID;
 
         SoundManager.PlayMusic(id);
+    }
+
+    public void TogglePause() {
+        if (UserInterface.isPaused()) {
+            PlayerMoving.LockInput();
+            UserInterface.ClosePauseMenu();
+        } else {
+            PlayerMoving.UnlockInput();
+            UserInterface.OpenPauseMenu();
+        }
     }
 
     public void Save() {

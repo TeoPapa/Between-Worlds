@@ -10,7 +10,12 @@ public class PlayerMovementSounds : SoundfulObject {
     bool OnTerrain = false;
     RaycastHit hit;
 
-    public string[] LayerNames = { "Grass", "Grass", "Stone", "Stone", "Mud" };
+    public List<string> StoneNames;
+    public List<string> GrassNames;
+    public List<string> MudNames;
+    public List<string> SandNames;
+    public List<string> WoodNames;
+
 
     public List<AudioSource> Sources;
 
@@ -60,7 +65,7 @@ public class PlayerMovementSounds : SoundfulObject {
         if (OnTerrain)
             CurrentSurface = FindTerrainGround();
         else
-            CurrentSurface = FindGround();
+            CurrentSurface = FindGround(hit.collider.GetComponent<Renderer>().material.name);
 
         switch (CurrentSurface) {
             case "Grass":
@@ -76,24 +81,34 @@ public class PlayerMovementSounds : SoundfulObject {
         }
     }
 
-    string FindGround() {
-        string CurrentSurface = "Stone";
+    string FindGround(string SurfaceValue) {
 
-        Renderer renderer = hit.collider.GetComponent<Renderer>();
-        if (renderer != null) {
-            CurrentSurface = renderer.material.name;
+        foreach(string gr in StoneNames) {
+            if (SurfaceValue.Contains(gr, StringComparison.OrdinalIgnoreCase))
+                return "Stone";
         }
 
-        if (CurrentSurface.Contains("Mud", StringComparison.OrdinalIgnoreCase))
-            CurrentSurface = "Mud";
-        else if (CurrentSurface.Contains("Grass", StringComparison.OrdinalIgnoreCase))
-            CurrentSurface = "Grass";
-        else if (CurrentSurface.Contains("Wood", StringComparison.OrdinalIgnoreCase))
-            CurrentSurface = "Wood";
-        else
-            CurrentSurface = "Stone";
+        foreach (string gr in GrassNames) {
+            if (SurfaceValue.Contains(gr, StringComparison.OrdinalIgnoreCase))
+                return "Grass";
+        }
 
-        return CurrentSurface;
+        foreach (string gr in MudNames) {
+            if (SurfaceValue.Contains(gr, StringComparison.OrdinalIgnoreCase))
+                return "Mud";
+        }
+
+        foreach (string gr in WoodNames) {
+            if (SurfaceValue.Contains(gr, StringComparison.OrdinalIgnoreCase))
+                return "Wood";
+        }
+
+        foreach (string gr in SandNames) {
+            if (SurfaceValue.Contains(gr, StringComparison.OrdinalIgnoreCase))
+                return "Sand";
+        }
+
+        return "Stone";
     }
 
     string FindTerrainGround() {
@@ -122,6 +137,6 @@ public class PlayerMovementSounds : SoundfulObject {
             }
         }
 
-        return LayerNames[dominantLayerIndex];
+        return FindGround(terrainData.terrainLayers[dominantLayerIndex].name);
     }
 }

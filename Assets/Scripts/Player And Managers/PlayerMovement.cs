@@ -46,8 +46,11 @@ public class PlayerMovement : MonoBehaviour {
 
     float PrevY;
 
+    public Vector3 TeleportPosition;
+    public Vector3 TeleportRotation;
+
     private void Awake() {
-        Teleport = true;
+        TeleportPlayer(GameHandler.PlayerPosition, GameHandler.PlayerRotation);
 
         LockedInput = false;
 
@@ -82,6 +85,12 @@ public class PlayerMovement : MonoBehaviour {
 
     public void LockMovement() {
         CanMove = false;
+    }
+
+    public void TeleportPlayer(Vector3 Position, Vector3 Rotation) {
+        TeleportPosition = Position;
+        TeleportRotation = Rotation;
+        Teleport = true;
     }
 
     void OnMove(InputValue movementValue) {
@@ -174,8 +183,8 @@ public class PlayerMovement : MonoBehaviour {
     void FixedUpdate() {
 
         if (Teleport) {
-            this.gameObject.transform.position = GameHandler.PlayerPosition;
-            this.gameObject.transform.rotation = Quaternion.Euler(GameHandler.PlayerRotation);
+            this.gameObject.transform.position = TeleportPosition;
+            this.gameObject.transform.rotation = Quaternion.Euler(TeleportRotation);
             Teleport = false;
             return;
         }
